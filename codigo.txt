@@ -1,0 +1,63 @@
+import os
+
+clearConsole = lambda: os.system('cls' if os.name in ('nt', 'dos') else 'clear')
+        clearConsole()
+
+
+categorias
+----------
+id
+nombre
+
+
+marcas
+------
+id
+nombre
+
+
+productos
+---------
+id
+id_categoria
+id_marca
+nombre
+precio
+
+
+usuarios
+--------
+id
+dni
+nombre
+id_ciudad
+email
+password
+b_admin
+
+
+carritos
+--------
+id
+id_usuario
+total
+b_comprado
+
+
+compras
+-------
+id
+id_carrito
+id_producto
+cantidad
+precio
+
+
+
+
+MySql Config:
+/etc/mysql/mysql.conf.d/mysqld.cnf
+
+phpMyAdmin Config:
+/etc/phpmyadmin/config-db.php
+/etc/phpmyadmin/conf.d (agregar archivo de config)
