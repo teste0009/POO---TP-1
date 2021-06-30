@@ -61,3 +61,6 @@ MySql Config:
 phpMyAdmin Config:
 /etc/phpmyadmin/config-db.php
 /etc/phpmyadmin/conf.d (agregar archivo de config)
+
+
+importar base
