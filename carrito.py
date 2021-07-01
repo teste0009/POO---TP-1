@@ -1,4 +1,5 @@
 from db import _dbi
+from constantes import *
 
 
 class Carrito():
@@ -18,7 +19,7 @@ class Carrito():
   def get_compras(self) -> list:
     return self.__compras
 
-  def __set_carrito(self, id_carrito:int, total:float):
+  def __set_id_total(self, id_carrito:int, total:float):
     self.__id = id_carrito
     self.__total = total
 
@@ -27,7 +28,7 @@ class Carrito():
     _db_carrito = _dbi.get_fetchone("get_carrito", (id_usuario,))
     if (_db_carrito != None):
       id_carrito, total = _db_carrito
-      self.__set_carrito(id_carrito, total)
+      self.__set_id_total(id_carrito, total)
       _db_compras = _dbi.get_fetchall("get_compras", (id_carrito,))
       if (_db_compras != None):
         for _compra in _db_compras:
@@ -38,14 +39,14 @@ class Carrito():
     return _dbi.get_fetchone("get_total_carrito", (self.__id, ))[0]
 
   def registrar_compra(self, _compra:list):
-    id_producto, cantidad, sub_total, descripcion = _compra[0], _compra[1], _compra[1]*_compra[2], _compra[3]
+    sub_total = _compra[C_CANTIDAD] * _compra[C_PRECIO]
     if (self.__id == 0):
       id_carrito = _dbi.get_lastrowid("insert_carrito", (self.__id_usuario, sub_total))
-      self.__set_carrito(id_carrito, sub_total)
+      self.__set_id_total(id_carrito, sub_total)
     else:
       id_carrito = self.__id
-    id_compra = _dbi.get_lastrowid("insert_compra", (id_carrito, id_producto, cantidad, sub_total))
-    self.__compras.append([id_compra, cantidad, descripcion, sub_total])
+    id_compra = _dbi.get_lastrowid("insert_compra", (id_carrito, _compra[C_ID_PRODUCTO], _compra[C_CANTIDAD], sub_total))
+    self.__compras.append([id_compra, _compra[C_CANTIDAD], _compra[C_DESCRIPCION], sub_total])
     self.__total = self.get_total_carrito()
 
   def borrar_compra(self, _compra:list):
@@ -57,7 +58,7 @@ class Carrito():
     else:
       self.__total = self.get_total_carrito()
 
-  def b_finalizar_compra(self) -> bool:
+  def is_finalizar_compra(self) -> bool:
     if (_dbi.get_rowcount("finalizar_compra", (self.__id, )) > 0):
       self.__id, self.__total, self.__b_comprado, self.__compras = 0, 0, False, []
       return True
@@ -71,5 +72,5 @@ class Carrito():
       _carritos_usuario[int_comprado*2+1] = total
     return _carritos_usuario
 
-  def reiniciar(self):
+  def vaciar(self):
     self.__init__()

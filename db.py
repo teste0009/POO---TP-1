@@ -25,7 +25,7 @@ class Db():
                   "left join provincias pr on ci.id_provincia = pr.id "
                   "left join paises pa on pr.id_pais = pa.id "
                   "where email = %s and password = %s"),
-      "insert_usuario": "insert into usuarios (dni, nombre, id_ciudad, email, password, b_admin) values (%s, %s, %s, %s, %s, %s)",
+      "insert_usuario": "insert into usuarios (dni, nombre, id_ciudad, email, password, b_admin) values (%s, %s, %s, %s, %s, 0)",
       "get_productos": ("select pr.id, ca.nombre, ma.nombre, pr.nombre, pr.precio "
                         "from productos pr "
                         "left join categorias ca on ca.id = pr.id_categoria "
@@ -48,7 +48,7 @@ class Db():
       "get_carritos_usuario": "select b_comprado, count(id) as cantidad, ifnull(sum(total), 0) as total from carritos where id_usuario=%s group by b_comprado",
       "get_categorias": "select * from categorias order by nombre",
       "get_marcas": "select * from marcas order by nombre",
-      "get_usuarios":  ("select u.*, convert(from_base64(password), nchar) AS pass_decode, if(b_admin=1, 'SI', 'NO') AS admin, "
+      "get_usuarios":  ("select u.*, convert(from_base64(password), nchar) as pass_decode, if(b_admin=1, 'SI', 'NO') AS admin, "
                           "c.nombre as ciudad, p.nombre as provincia, pa.nombre as pais "
                         "from usuarios u "
                         "left join ciudades c on u.id_ciudad = c.id "
@@ -98,6 +98,5 @@ class Db():
   def get_id(self, sql_ind, _val=tuple) -> int:
     _valor_id = self.get_fetchone(sql_ind, _val)
     return 0 if (_valor_id == None) else _valor_id[0]
-
 
 _dbi=Db()

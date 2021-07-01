@@ -1,4 +1,8 @@
+from smtplib import LMTP_PORT
+
+from validate_email import LOCAL_PART
 from db import _dbi
+from constantes import *
 
 
 class Usuario():
@@ -45,9 +49,6 @@ class Usuario():
     self.__provincia = _login_usuario[8]
     self.__pais = _login_usuario[9]
 
-  def set_logout(self):
-    self.__init__()
-
   def is_logueado(self) -> bool:
     return self.__is_logueado
 
@@ -58,7 +59,10 @@ class Usuario():
     return (_dbi.get_fetchone("get_email", (email, )) != None)
 
   def get_login(self, _login:list):
-    return _dbi.get_fetchone("get_login", (_login[0], _dbi.encode_pass(_login[1])))
+    return _dbi.get_fetchone("get_login", (_login[L_EMAIL], _dbi.encode_pass(_login[L_PASSWORD])))
 
-  def insert_usuario(self, _registro:list):
-    _dbi.commit("insert_usuario", (_registro[0], _registro[1], _registro[2], _registro[3], _dbi.encode_pass(_registro[4]), 0))
+  def registrar(self, _registro:tuple):
+    _dbi.commit("insert_usuario", _registro)
+
+  def logout(self):
+    self.__init__()

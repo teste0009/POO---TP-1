@@ -1,6 +1,7 @@
 from validate_email import validate_email
 from usuario import Usuario
 from db import _dbi
+from constantes import *
 
 
 class Validador():
@@ -55,58 +56,58 @@ class Validador():
       _registro[i] = _registro[i].strip()
 
     try:
-      dni = int(_registro[0])
+      dni = int(_registro[R_DNI])
     except:
       self.set_error("DNI Incorrecto")
 
-    if (_registro[1] == ""):
+    if (_registro[R_NOMBRE] == ""):
       self.set_error("Nombre vacio")
 
-    if (_registro[2] == ""):
+    if (_registro[R_EMAIL] == ""):
       self.set_error("Email vacio")
-    elif (validate_email(_registro[2]) == False):
+    elif (validate_email(_registro[R_EMAIL]) == False):
       self.set_error("Email incorrecto")
-    elif (_usuario.is_existe_email(_registro[2])):
+    elif (_usuario.is_existe_email(_registro[R_EMAIL])):
       self.set_error("Email ya registrado")
 
     _caracteres_especiales=['_', '-', '$','@','#','%']
-    if (_registro[3] == ""):
+    if (_registro[R_PASSWORD] == ""):
       self.set_error('Password vacio')
-    elif (len(_registro[3]) < 6):
+    elif (len(_registro[R_PASSWORD]) < 6):
       self.set_error("El Password debe contener al menos 6 caracteres")
-    elif (not any(i.islower() for i in _registro[3])):
+    elif (not any(i.islower() for i in _registro[R_PASSWORD])):
       self.set_error("El Password debe contener al menos una letra minuscula")
-    elif (not any(i.isupper() for i in _registro[3])):
+    elif (not any(i.isupper() for i in _registro[R_PASSWORD])):
       self.set_error("El Password debe contener al menos una letra mayuscula")
-    elif (not any(i.isdigit() for i in _registro[3])):
+    elif (not any(i.isdigit() for i in _registro[R_PASSWORD])):
       self.set_error("El Password debe contener al menos un caracter numeral")
-    elif (not any(i in _caracteres_especiales for i in _registro[3])):
+    elif (not any(i in _caracteres_especiales for i in _registro[R_PASSWORD])):
       self.set_error("El Password debe contener al menos uno de los carateres especiales " + ' '.join(_caracteres_especiales))
-    elif (_registro[3] != _registro[4]):
+    elif (_registro[R_PASSWORD] != _registro[R_PASSWORD_RI]):
       self.set_error("El Password Reingresado es diferente")
 
-    if (_registro[5] == ""):
+    if (_registro[R_PAIS] == ""):
       self.set_error("Campo Pais vacio")
     else:
-      id_pais = _dbi.get_id("id_pais", (_registro[5],))
+      id_pais = _dbi.get_id("id_pais", (_registro[R_PAIS],))
       if (id_pais == 0):
         self.set_error("Pais Incorrecto")
-      elif (_registro[6] == ""):
+      elif (_registro[R_PROVINCIA] == ""):
         self.set_error("Campo Provincia vacio")
       else:
-        id_provincia = _dbi.get_id("id_provincia", (_registro[6], id_pais))
+        id_provincia = _dbi.get_id("id_provincia", (_registro[R_PROVINCIA], id_pais))
         if (id_provincia == 0):
           self.set_error("Provincia Incorrecta")
-        elif (_registro[7] == ""):
+        elif (_registro[R_CIUDAD] == ""):
           self.set_error("Campo Ciudad vacio")
         else:
-          id_ciudad = _dbi.get_id("id_ciudad", (_registro[7], id_provincia))
+          id_ciudad = _dbi.get_id("id_ciudad", (_registro[R_CIUDAD], id_provincia))
           if (id_ciudad == 0):
             self.set_error("Ciudad Incorrecta")
 
     if (len(self.get_errores()) > 0):
       return None
     else:
-      _usuario.insert_usuario([_registro[0], _registro[1], id_ciudad, _registro[2], _registro[3]])
+      _usuario.registrar((_registro[R_DNI], _registro[R_NOMBRE], id_ciudad, _registro[R_EMAIL], _dbi.encode_pass(_registro[R_PASSWORD])))
       self.set_mensaje("Registro de Nuevo Usuario Correcto")
       return _registro

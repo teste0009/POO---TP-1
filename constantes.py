@@ -1,0 +1,13 @@
+
+# registro
+R_DNI, R_NOMBRE, R_EMAIL, R_PASSWORD, R_PASSWORD_RI, R_PAIS, R_PROVINCIA, R_CIUDAD = 0, 1, 2, 3, 4, 5, 6, 7
+# login
+L_EMAIL, L_PASSWORD = 0, 1
+# producto
+P_ID_PRODUCTO, P_CATEGORIA, P_MARCA, P_DESCRIPCION, P_PRECIO = 0, 1, 2, 3, 4
+# compra
+C_ID_PRODUCTO, C_CANTIDAD, C_PRECIO, C_DESCRIPCION = 0,1,2,3
+# bool
+IS_ADMIN = True
+# perfiles usuario
+PF_INVITADO, PF_USUARIO, PF_ADMIN = "invitado", "usuario", "admin"

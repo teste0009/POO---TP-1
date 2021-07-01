@@ -1,16 +1,17 @@
 import os
 from usuario import Usuario
+from constantes import *
 
 
 class View():
   def __init__(self) -> None:
     self.__cant_opciones = 0
     self.__menu = {
-      "default": ["Login", "Registrarse"],
-      "logueado": ["Mi carrito", "Ver, Comprar Productos", "Mis Datos", "Logout"],
-      "admin": ["Categorias", "Marcas", "Productos", "Usuarios", "Resumen Carritos", "Logout"]
+      PF_INVITADO: ["Ver Productos", "Login", "Registrarse"],
+      PF_USUARIO: ["Mi carrito", "Ver, Comprar Productos", "Mis Datos", "Logout"],
+      PF_ADMIN: ["Categorias", "Marcas", "Productos", "Usuarios", "Resumen Carritos", "Logout"]
     }
-    self.__str_usuario_perfil = ""
+    self.__str_nombre_usuario = ""
 
   def get_cant_opciones(self) -> int:
     return self.__cant_opciones
@@ -28,20 +29,19 @@ class View():
       for str_mensaje in _mensajes:
         print(f"{str_tipo}: {str_mensaje}.")
 
-  def menu_generico(self, nombre:str):
+  def titulo_menu(self, titulo:str):
     self.__borrar_pantalla()
-    print(f"{nombre}: {self.__str_usuario_perfil}")
+    print("* * Curso POO - TP 1 - Ecommerce * *\n")
+    print(f"{titulo}: {self.__str_nombre_usuario}")
+    print("-" * (len(titulo) + 1)) # + len(self.__str_nombre_usuario) + 2))
 
-  def menu_principal(self, _tipo_menu_usuario:list, d_mensajes:dict):
-    str_tipo, str_usuario = _tipo_menu_usuario[0], _tipo_menu_usuario[1]
-    self.__str_usuario_perfil = str_usuario
-
-    self.__cant_opciones = len(self.__menu[str_tipo])
-    self.__borrar_pantalla()
+  def menu_principal(self, _perfil_menu_usuario:list, d_mensajes:dict):
+    str_perfil, self.__str_nombre_usuario = _perfil_menu_usuario[0], _perfil_menu_usuario[1]
+    self.__cant_opciones = len(self.__menu[str_perfil])
 
     cont = 1
-    print("Menú principal:", str_usuario)
-    for opcion in self.__menu[str_tipo]:
+    self.titulo_menu("Menú principal")
+    for opcion in self.__menu[str_perfil]:
       print(f"{cont} - {opcion}.")
       cont += 1
     print("\n0 - Salir.")
@@ -66,7 +66,7 @@ class View():
     print("\nValor Total del Carrito: ", total, "\n")
     print(str(len(_compras)+1).center(5), "Finalizar Compra.")
 
-  def mostrar_datos(self, _usuario:Usuario, _carritos:dict):
+  def mostrar_datos_usuario(self, _usuario:Usuario, _carritos:list):
     print(f"DNI:       {_usuario.get_dni()}")
     print(f"Nombre:    {_usuario.get_nombre()}")
     print(f"Email:     {_usuario.get_email()}")
@@ -76,7 +76,7 @@ class View():
     print(f"Carritos comprados:".ljust(21), f"{str(_carritos[2]).rjust(2)}. Total: {str(_carritos[3]).rjust(10)}.")
     print(f"Carritos pendientes:".ljust(21), f"{str(_carritos[0]).rjust(2)}. Total: {str(_carritos[1]).rjust(10)}.\n")
 
-  def listar_registros(self, _registros:list):
+  def listado_generico(self, _registros:list):
     print("ID.".center(6), "Nombre".ljust(30))
     for _registro in _registros:
       id, nombre = _registro

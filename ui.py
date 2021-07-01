@@ -11,14 +11,14 @@ class UI(): # Interface de Usuario
       opcion_input = -1
     return opcion_input
 
-  def get_input_login(self) -> list:
+  def get_login_usuario(self) -> list:
     return [input("Ingrese su email: "), input("Ingrese su password: ")]
 
-  def get_input_registro(self) -> list:
+  def get_registro_usuario(self) -> list:
     return [input("Ingrese su DNI: "), input("Ingrese su Nombre: "), input("Ingrese su Email: "), input("Ingrese su Password: "),
       input("Reingrese su Password: "), input("Ingrese el Pais: "), input("Ingrese la Provincia: "), input("Ingrese su Ciudad: "), ]
 
-  def get_volver_o_reintentar(self) -> bool:
+  def is_volver(self) -> bool:
     return True if (input("Presione una tecla para reintentar (0 para Volver) ") == "0") else False
 
   def enter_para_continuar(self):
