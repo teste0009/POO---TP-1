@@ -1,6 +1,3 @@
-from smtplib import LMTP_PORT
-
-from validate_email import LOCAL_PART
 from db import _dbi
 from constantes import *
 
