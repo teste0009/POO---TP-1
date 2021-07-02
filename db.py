@@ -72,7 +72,7 @@ class Db():
   def encode_pass(self, password):
     return base64.encodebytes(bytes(password, 'utf-8')).decode('utf-8').strip()
 
-  def __decode_pass(self,password):
+  def __decode_pass(self, password):                                                           # * * * NO USADO * * *
     return base64.decodebytes(password.encode("UTF-8")).decode('utf-8')
 
   def get_fetchone(self, sql_ind, _val=tuple):

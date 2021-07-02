@@ -1,5 +1,5 @@
 from validate_email import validate_email
-from usuario import Usuario
+from usuario import Usuario # Solo para referencia. NO para instanciar.
 from db import _dbi
 from constantes import *
 
@@ -8,7 +8,7 @@ class Validador():
   def __init__(self) -> None:
       self.__mensajes = {"ERROR": [], "Mensaje": [], "debug": [],}
 
-  def set_mensaje(self, mensaje:str) -> None:
+  def set_mensaje(self, mensaje:str) -> None:                                                 # * * * Gestion de Mensajes y Errores. * * *
     self.__mensajes["Mensaje"].append(mensaje)
 
   def set_error(self, error:str) -> None:
@@ -19,31 +19,29 @@ class Validador():
 
   def get_mensajes(self) -> dict:
     _mensajes = self.__mensajes
-    self.__mensajes = {"ERROR": [], "Mensaje": [], "debug": [],}
+    self.__mensajes = {"ERROR": [], "Mensaje": [], "debug": [],}                              # * * * Vacia __mensajes antes. (!) * * *
     return _mensajes
 
   def get_errores(self) -> list:
     return self.__mensajes["ERROR"]
 
-  def b_pregunta(self, respuesta:str) -> bool:
-    _si = ["s", "si"]
-    _no = ["n", "no"]
-    if (respuesta.lower() in _si):
+  def b_pregunta(self, respuesta:str) -> bool:                                                # * * * Validadores * * *
+    if (respuesta.lower() in ["s", "si"]):
       return True
-    elif (respuesta.lower() in _no):
+    elif (respuesta.lower() in ["n", "no"]):
       return False
     else:
       self.set_error("Respuesta Incorrecta")
       return False
 
-  def get_opcion_menu(self, opcion_input:int, cant_opciones:int, str_error:str = "Opción incorrecta") -> int:
+  def get_opcion_menu(self, opcion_input:int, cant_opciones:int, str_error:str = "Opción incorrecta") -> int: # * * * Opcion Menu * * *
     if (opcion_input >= 0 and opcion_input <= cant_opciones):
       return opcion_input
     else:
       self.set_error(str_error)
       return -1
 
-  def get_login(self, _usuario:Usuario, _login:list):
+  def get_login(self, _usuario:Usuario, _login:list):                                         # * * * LOGIN Usuario * * *
     _get_login = _usuario.get_login(_login)
     if (_get_login == None):
       self.set_error("Email o Password, incorrecto")
@@ -51,7 +49,7 @@ class Validador():
       self.set_mensaje("Login Correcto")
     return _get_login
 
-  def registro_usuario(self, _usuario:Usuario, _registro:list):
+  def registro_usuario(self, _usuario:Usuario, _registro:list):                               # * * * REGISTRO de Usuario * * *
     for i in range(len(_registro)):
       _registro[i] = _registro[i].strip()
 
